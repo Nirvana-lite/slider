@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="GRID.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <div class="container">
+            <div class="myslide" ref='slides'>
+                <div class="item">
+                    <img src="img/0HAH0Nl9bP.webp">
+                    <h3>text 1</h3>
+                    <p>Description</p>
+                </div>
+                <div class="item">
+                    <img src="img/1361048689_beauty_is_epitomised_in_this_gallery_of_girls_10.jpg">
+                    <h3>text 2</h3>
+                    <p>Description</p>
+                </div>
+                <div class="item">
+                    <img src="img/1495006803_beautiful_girls_01.jpg">
+                    <h3>text 3</h3>
+                    <p>Description</p>
+                </div>
+                <div class="item">
+                    <img src="img/1551880119_mariana-zaragoza-1.jpg">
+                    <h3>text 4</h3>
+                    <p>Description</p>
+                </div>
+                <div class="item">
+                    <img src="img/166719_main.jpg">
+                    <h3>text 5</h3>
+                    <p>Description</p>
+                </div>
+                <div class="item">
+                    <img src="img/874c5144d531f5974892d223581037ca.jpg">
+                    <h3>text 6</h3>
+                    <p>Description</p>
+                </div>
+                <div class="item">
+                    <img src="img/atypical_beauty_09.jpg">
+                    <h3>text 7</h3>
+                    <p>Description</p>
+                </div>
+                <div class="item">
+                    <img src="img/emili-ratakovski-10-1050x1379.jpg">
+                    <h3>text 8</h3>
+                    <p>Description</p>
+                </div>
+                <div class="item">
+                    <img src="img/maxresdefault.jpg">
+                    <h3>text 9</h3>
+                    <p>Description</p>
+                </div>
+                <div class="item">
+                    <img src="img/mid_182357_7916.jpg">
+                    <h3>text 10</h3>
+                    <p>Description</p>
+                </div>
+                <div class="item">
+                    <img src="img/nice_girls_02360_006.jpg">
+                    <h3>text 11</h3>
+                    <p>Description</p>
+                </div>
+                <div class="item">
+                    <img src="img/pogudx5bdsfr7g65k.webp">
+                    <h3>text 12</h3>
+                    <p>Description</p>
+                </div>
+                <div class="item">
+                    <img src="img/resize.jpg">
+                    <h3>text 13</h3>
+                    <p>Description</p>
+                </div>
+
+                <div class="slideitem" v-for="slide in el.newCollect" v-html='slide'></div>
+            </div>
+        </div>
+        <span @click='prevSlide'>{{options.prevNav}}</span>
+        <span @click='nextSlide'>{{options.nextNav}}</span>
+    </div>
+    <pre>
+            Это мой слайдер. 
+            Таких слайдеров много, но эта мой. 
+            Мой слайдер — мой лучший друг. Это — моя жизнь. 
+            Я должен научиться владеть слайдером так же, как владею своей жизнью. 
+            Без меня мой слайдер бесполезен. Без моего слайдера бесполезен я.
+    </pre>
+    <script src="/vue.js"></script>
+    <script>
+        new Vue({
+            el: "#app",
+            data: function () {
+                return {
+
+                    el: {
+                        slides: null,
+                        newCollect: {},
+                        start: 1
+                    },
+                    options: {
+                        items: 5,
+                        margin: 20,
+                        nav: true,
+                        dots: true,
+                        prevNav: 'Туда',
+                        nextNav: 'Сюда',
+                        responsive: {
+                            0: {
+                                items: 1
+                            },
+                            768: {
+                                items: 3
+                            },
+                            999: {
+                                items: 5
+                            }
+                        }
+                    },
+                    width: {}
+                }
+            },
+            computed: {},
+            methods: {
+                nextSlide: function () {
+                    this.el.start++
+                    if (this.el.start > this.numItemReal) {
+                        this.el.start = 1
+                    }
+                    this.setActive()
+                },
+                prevSlide: function () {
+                    this.el.start--
+                    if (this.el.start == 0) {
+                        this.el.start = this.numItemReal
+                    }
+                    this.setActive()
+                },
+                updateWidth: function () {
+                    this.width.document = window.innerWidth;
+                    this.reload();
+                },
+                reload: function () {
+                    if (this.options.responsive) {
+                        this.breakpoints = Object.keys(this.options.responsive);
+                        this.breakpoints.forEach((width) => {
+                            if (width <= this.width.document) {
+                                for (let key in this.options.responsive[width]) {
+                                    this.options.items = this.options.responsive[width][key]
+                                }
+                            }
+                        })
+                    }
+                    this.setActive()
+                },
+                setActive: function (start = this.el.start) {
+                    for (let i = 1; i <= this.numItemReal; i++) {
+                        this.el.newCollect = {};
+                    }
+                    if (start + this.options.items - 1 <= this.numItemReal) {
+                        for (let i = 1; i <= this.numItemReal; i++) {
+                            if (i >= start && i <= start + this.options.items - 1) {
+                                this.el.newCollect[i] = this.el.slides[i - 1].innerHTML
+                            }
+                        }
+                    } else {
+                        let x = 1;
+                        for (let i = start; i <= this.numItemReal; i++) {
+                            this.el.newCollect[x] = this.el.slides[i - 1].innerHTML
+                            x++;
+                        }
+                        let a = (this.options.items - 1) - (this.numItemReal - start)
+                        for (let i = 1; i <= a; i++) {
+                            this.el.newCollect[x] = this.el.slides[i - 1].innerHTML
+                            x++;
+                        }
+                    }
+                    for (var item in this.el.massItems) {
+                        if (this.el.massItems[item] === true) {
+                            this.el.slides[item - 1].classList.add('active');
+                        } else {
+                            this.el.slides[item - 1].classList.remove('active')
+                        }
+                    }
+                },
+            },
+
+            mounted() {
+                this.$nextTick(function () {
+                    this.updateWidth()
+                    window.addEventListener('resize', this.updateWidth)
+                    this.el.slides = this.$refs.slides.children;
+                    this.numItemReal = this.$refs.slides.children.length;
+                    this.setActive()
+                })
+            },
+        })
+    </script>
+    <style>
+        #app .item {
+            display: none;
+        }
+
+        .myslide {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        }
+
+        .slideitem img {
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
+        }
+        pre {
+    border: 2px solid crimson;
+    display: inline-block;
+}
+    </style>
+</body>
+
+</html>
