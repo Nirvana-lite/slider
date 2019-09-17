@@ -84,6 +84,10 @@
         </div>
         <span @click='prevSlide'>{{options.prevNav}}</span>
         <span @click='nextSlide'>{{options.nextNav}}</span>
+        <hr>
+        {{dragDistance}}
+        <hr>
+        {{swipeDistance}}
     </div>
     <pre>
             Это мой слайдер. 
@@ -123,11 +127,10 @@
                         }
                     },
                     width: {},
-                    swipeDistance: 100,
+                    swipeDistance: 50,
                     dragDistance: 0,
                 }
             },
-            computed: {},
             methods: {
                 handleMouseUp() {
                     this.mouseDown = false
@@ -156,8 +159,19 @@
                     let positionY = ('ontouchstart' in window) ? e.touches[0].clientY : e.clientY
                     let dragDistanceX = Math.abs(positionX - this.dragStartX)
                     let dragDistanceY = Math.abs(positionY - this.dragStartY)
+
                     if (dragDistanceX > 3 * dragDistanceY) {
                         this.dragDistance = positionX - this.dragStartX
+                        if (this.dragDistance > this.swipeDistance) {
+                            this.dragStartX = ('ontouchstart' in window) ? e.touches[0].clientX : e.clientX
+                            this.dragStartY = ('ontouchstart' in window) ? e.touches[0].clientY : e.clientY
+                            this.nextSlide();
+                        }
+                        if (this.dragDistance < -1 * this.swipeDistance) {
+                            this.dragStartX = ('ontouchstart' in window) ? e.touches[0].clientX : e.clientX
+                            this.dragStartY = ('ontouchstart' in window) ? e.touches[0].clientY : e.clientY
+                            this.prevSlide();
+                        }
                     }
                 },
                 nextSlide: function () {
@@ -187,11 +201,12 @@
                                     this.options.items = this.options.responsive[width][key]
                                 }
                             }
-                        }) 
+                        })
                     }
                     this.setActive()
                 },
                 setActive: function (start = this.el.start) {
+                    this.dragDistance = 0;
                     for (let i = 1; i <= this.numItemReal; i++) {
                         this.el.newCollect = {};
                     }
@@ -249,16 +264,6 @@
                     if (!this.mouseDown) {
                         return
                     }
-                    if (this.dragDistance > this.swipeDistance) {
-                        this.prevSlide()
-                        this.dragDistance = 0;
-                        this.handleMouseUp()
-                    }
-                    if (this.dragDistance < -1 * this.swipeDistance) {
-                        this.nextSlide()
-                        this.dragDistance = 0;
-                        this.handleMouseUp()
-                    }
                 }
             },
         })
@@ -286,4 +291,4 @@
     </style>
 </body>
 
-</html> 
+</html>
