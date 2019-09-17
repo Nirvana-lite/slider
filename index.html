@@ -13,78 +13,16 @@
     <div id="app">
         <div class="container">
             <div class="myslide" ref='slides'>
-                <div class="item">
-                    <img src="img/0HAH0Nl9bP.webp">
-                    <h3>text 1</h3>
-                    <p>Description</p>
+                <div class="item" v-for="(slide,key) in el.newCollect" :key='key'>
+                    <img :src="slide.src">
+                    <h3>{{slide.text}}</h3>
+                    <span>{{slide.description}}</span>
                 </div>
-                <div class="item">
-                    <img src="img/1361048689_beauty_is_epitomised_in_this_gallery_of_girls_10.jpg">
-                    <h3>text 2</h3>
-                    <p>Description</p>
-                </div>
-                <div class="item">
-                    <img src="img/1495006803_beautiful_girls_01.jpg">
-                    <h3>text 3</h3>
-                    <p>Description</p>
-                </div>
-                <div class="item">
-                    <img src="img/1551880119_mariana-zaragoza-1.jpg">
-                    <h3>text 4</h3>
-                    <p>Description</p>
-                </div>
-                <div class="item">
-                    <img src="img/166719_main.jpg">
-                    <h3>text 5</h3>
-                    <p>Description</p>
-                </div>
-                <div class="item">
-                    <img src="img/874c5144d531f5974892d223581037ca.jpg">
-                    <h3>text 6</h3>
-                    <p>Description</p>
-                </div>
-                <div class="item">
-                    <img src="img/atypical_beauty_09.jpg">
-                    <h3>text 7</h3>
-                    <p>Description</p>
-                </div>
-                <div class="item">
-                    <img src="img/emili-ratakovski-10-1050x1379.jpg">
-                    <h3>text 8</h3>
-                    <p>Description</p>
-                </div>
-                <div class="item">
-                    <img src="img/maxresdefault.jpg">
-                    <h3>text 9</h3>
-                    <p>Description</p>
-                </div>
-                <div class="item">
-                    <img src="img/mid_182357_7916.jpg">
-                    <h3>text 10</h3>
-                    <p>Description</p>
-                </div>
-                <div class="item">
-                    <img src="img/nice_girls_02360_006.jpg">
-                    <h3>text 11</h3>
-                    <p>Description</p>
-                </div>
-                <div class="item">
-                    <img src="img/pogudx5bdsfr7g65k.webp">
-                    <h3>text 12</h3>
-                    <p>Description</p>
-                </div>
-                <div class="item">
-                    <img src="img/resize.jpg">
-                    <h3>text 13</h3>
-                    <p>Description</p>
-                </div>
-
-                <div class="slideitem" v-for="slide in el.newCollect" v-html='slide'></div>
             </div>
         </div>
         <span @click='prevSlide'>{{options.prevNav}}</span>
         <span @click='nextSlide'>{{options.nextNav}}</span>
-    </div> 
+    </div>
     <pre>
             Это мой слайдер. 
             Таких слайдеров много, но эта мой. 
@@ -98,8 +36,74 @@
             el: "#app",
             data: function () {
                 return {
+                    slides: {
+                        1: {
+                            'src': 'img/1361048689_beauty_is_epitomised_in_this_gallery_of_girls_10.jpg',
+                            'description': 'Description',
+                            'text': 'text 1'
+                        },
+                        2: {
+                            'src': 'img/emili-ratakovski-10-1050x1379.jpg',
+                            'description': 'Description 2',
+                            'text': 'text 2'
+                        },
+                        3: {
+                            'src': 'img/1495006803_beautiful_girls_01.jpg',
+                            'description': 'Description 3',
+                            'text': 'text 3'
+                        },
+                        4: {
+                            'src': 'img/1551880119_mariana-zaragoza-1.jpg',
+                            'description': 'Description 4',
+                            'text': 'text 4'
+                        },
+                        5: {
+                            'src': 'img/166719_main.jpg',
+                            'description': 'Description 5',
+                            'text': 'text 5'
+                        },
+                        6: {
+                            'src': 'img/874c5144d531f5974892d223581037ca.jpg',
+                            'description': 'Description 6',
+                            'text': 'text 6'
+                        },
+                        7: {
+                            'src': 'img/atypical_beauty_09.jpg',
+                            'description': 'Description 7',
+                            'text': 'text 7'
+                        },
+                        8: {
+                            'src': 'img/emili-ratakovski-10-1050x1379.jpg',
+                            'description': 'Description 8',
+                            'text': 'text 8'
+                        },
+                        9: {
+                            'src': 'img/maxresdefault.jpg',
+                            'description': 'Description 9',
+                            'text': 'text 9'
+                        },
+                        10: {
+                            'src': 'img/mid_182357_7916.jpg',
+                            'description': 'Description 10',
+                            'text': 'text 10'
+                        },
+                        11: {
+                            'src': 'img/nice_girls_02360_006.jpg',
+                            'description': 'Description 11',
+                            'text': 'text 11'
+                        },
+                        12: {
+                            'src': 'img/pogudx5bdsfr7g65k.webp',
+                            'description': 'Description 12',
+                            'text': 'text 12'
+                        },
+                        13: {
+                            'src': 'img/resize.jpg',
+                            'description': 'Description 13',
+                            'text': 'text 13'
+                        },
+                    },
                     el: {
-                        slides: null,
                         newCollect: {},
                         start: 1
                     },
@@ -151,25 +155,29 @@
                     this.dragStartY = ('ontouchstart' in window) ? e.touches[0].clientY : e.clientY
                 },
                 handleMouseMove: function (e) {
-                    if(this.mouseDown == true){
+                    if (this.mouseDown == true) {
                         let positionX = ('ontouchstart' in window) ? e.touches[0].clientX : e.clientX
-                    let positionY = ('ontouchstart' in window) ? e.touches[0].clientY : e.clientY
-                    let dragDistanceX = Math.abs(positionX - this.dragStartX)
-                    let dragDistanceY = Math.abs(positionY - this.dragStartY)
+                        let positionY = ('ontouchstart' in window) ? e.touches[0].clientY : e.clientY
+                        let dragDistanceX = Math.abs(positionX - this.dragStartX)
+                        let dragDistanceY = Math.abs(positionY - this.dragStartY)
 
-                    if (dragDistanceX > 3 * dragDistanceY) {
-                        this.dragDistance = positionX - this.dragStartX
-                        if (this.dragDistance > this.swipeDistance) {
-                            this.dragStartX = ('ontouchstart' in window) ? e.touches[0].clientX : e.clientX
-                            this.dragStartY = ('ontouchstart' in window) ? e.touches[0].clientY : e.clientY
-                            this.nextSlide();
+                        if (dragDistanceX > 3 * dragDistanceY) {
+                            this.dragDistance = positionX - this.dragStartX
+                            if (this.dragDistance > this.swipeDistance) {
+                                this.dragStartX = ('ontouchstart' in window) ? e.touches[0].clientX : e
+                                    .clientX
+                                this.dragStartY = ('ontouchstart' in window) ? e.touches[0].clientY : e
+                                    .clientY
+                                this.nextSlide();
+                            }
+                            if (this.dragDistance < -1 * this.swipeDistance) {
+                                this.dragStartX = ('ontouchstart' in window) ? e.touches[0].clientX : e
+                                    .clientX
+                                this.dragStartY = ('ontouchstart' in window) ? e.touches[0].clientY : e
+                                    .clientY
+                                this.prevSlide();
+                            }
                         }
-                        if (this.dragDistance < -1 * this.swipeDistance) {
-                            this.dragStartX = ('ontouchstart' in window) ? e.touches[0].clientX : e.clientX
-                            this.dragStartY = ('ontouchstart' in window) ? e.touches[0].clientY : e.clientY
-                            this.prevSlide();
-                        }
-                    }
                     }
                 },
                 nextSlide: function () {
@@ -211,26 +219,19 @@
                     if (start + this.options.items - 1 <= this.numItemReal) {
                         for (let i = 1; i <= this.numItemReal; i++) {
                             if (i >= start && i <= start + this.options.items - 1) {
-                                this.el.newCollect[i] = this.el.slides[i - 1].innerHTML
+                                this.el.newCollect[i] = this.slides[i]
                             }
                         }
                     } else {
                         let x = 1;
                         for (let i = start; i <= this.numItemReal; i++) {
-                            this.el.newCollect[x] = this.el.slides[i - 1].innerHTML
+                            this.el.newCollect[x] = this.slides[i]
                             x++;
                         }
                         let a = (this.options.items - 1) - (this.numItemReal - start)
                         for (let i = 1; i <= a; i++) {
-                            this.el.newCollect[x] = this.el.slides[i - 1].innerHTML
+                            this.el.newCollect[x] = this.slides[i]
                             x++;
-                        }
-                    }
-                    for (var item in this.el.massItems) {
-                        if (this.el.massItems[item] === true) {
-                            this.el.slides[item - 1].classList.add('active');
-                        } else {
-                            this.el.slides[item - 1].classList.remove('active')
                         }
                     }
                 },
@@ -240,9 +241,8 @@
                 this.$nextTick(function () {
                     this.updateWidth()
                     window.addEventListener('resize', this.updateWidth)
-                    this.el.slides = this.$refs.slides.children;
-                    this.numItemReal = this.$refs.slides.children.length;
-                    if ('ontouchstart' in window) {
+                    this.numItemReal = Object.keys(this.slides).length;
+                    if ('ontouchstart' in window) { 
                         this.$refs.slides.addEventListener('touchstart', this.handleMouseDown)
                         this.$refs.slides.addEventListener('touchend', this.handleMouseUp)
                         this.$refs.slides.addEventListener('touchmove', this.handleMouseMove)
@@ -266,22 +266,16 @@
             },
         })
     </script>
-    <style> 
-        #app .item {
-            display: none;
-        }
-
+    <style>
         .myslide {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
         }
-
-        .slideitem img {
+        .item img {
             width: 300px;
             height: 300px;
             object-fit: cover;
         }
-
         pre {
             border: 2px solid crimson;
             display: inline-block;
