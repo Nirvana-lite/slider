@@ -98,7 +98,6 @@
             el: "#app",
             data: function () {
                 return {
-
                     el: {
                         slides: null,
                         newCollect: {},
@@ -123,11 +122,44 @@
                             }
                         }
                     },
-                    width: {}
+                    width: {},
+                    swipeDistance: 100,
+                    dragDistance: 0,
                 }
             },
             computed: {},
             methods: {
+                handleMouseUp() {
+                    this.mouseDown = false
+                    this.enableScroll()
+                },
+                disableScroll() {
+                    document.ontouchmove = function (e) {
+                        e.preventDefault()
+                    }
+                },
+                enableScroll() {
+                    document.ontouchmove = function (e) {
+                        return true
+                    }
+                },
+                handleMouseDown: function (e) {
+                    if (!e.touches) {
+                        e.preventDefault()
+                    }
+                    this.mouseDown = true
+                    this.dragStartX = ('ontouchstart' in window) ? e.touches[0].clientX : e.clientX
+                    this.dragStartY = ('ontouchstart' in window) ? e.touches[0].clientY : e.clientY
+                },
+                handleMouseMove: function (e) {
+                    let positionX = ('ontouchstart' in window) ? e.touches[0].clientX : e.clientX
+                    let positionY = ('ontouchstart' in window) ? e.touches[0].clientY : e.clientY
+                    let dragDistanceX = Math.abs(positionX - this.dragStartX)
+                    let dragDistanceY = Math.abs(positionY - this.dragStartY)
+                    if (dragDistanceX > 3 * dragDistanceY) {
+                        this.dragDistance = positionX - this.dragStartX
+                    }
+                },
                 nextSlide: function () {
                     this.el.start++
                     if (this.el.start > this.numItemReal) {
@@ -197,8 +229,37 @@
                     window.addEventListener('resize', this.updateWidth)
                     this.el.slides = this.$refs.slides.children;
                     this.numItemReal = this.$refs.slides.children.length;
+                    if ('ontouchstart' in window) {
+                        this.$refs.slides.addEventListener('touchstart', this.handleMouseDown)
+                        this.$refs.slides.addEventListener('touchend', this.handleMouseUp)
+                        this.$refs.slides.addEventListener('touchmove', this.handleMouseMove)
+                    } else {
+                        this.$refs.slides.addEventListener('mousedown', this.handleMouseDown)
+                        this.$refs.slides.addEventListener('mouseup', this.handleMouseUp)
+                        this.$refs.slides.addEventListener('mousemove', this.handleMouseMove)
+                    }
                     this.setActive()
                 })
+            },
+            watch: {
+                documentWidth() {
+                    this.reload()
+                },
+                dragDistance() {
+                    if (!this.mouseDown) {
+                        return
+                    }
+                    if (this.dragDistance > this.swipeDistance) {
+                        this.prevSlide()
+                        this.dragDistance = 0;
+                        this.handleMouseUp()
+                    }
+                    if (this.dragDistance < -1 * this.swipeDistance) {
+                        this.nextSlide()
+                        this.dragDistance = 0;
+                        this.handleMouseUp()
+                    }
+                }
             },
         })
     </script>
@@ -217,10 +278,11 @@
             height: 300px;
             object-fit: cover;
         }
+
         pre {
-    border: 2px solid crimson;
-    display: inline-block;
-}
+            border: 2px solid crimson;
+            display: inline-block;
+        }
     </style>
 </body>
 
