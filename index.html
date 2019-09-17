@@ -20,8 +20,10 @@
                 </div>
             </div>
         </div>
-        <span @click='prevSlide'>{{options.prevNav}}</span>
-        <span @click='nextSlide'>{{options.nextNav}}</span>
+        <div class='navigat'>
+            <span class="navs" @click='prevSlide'>{{options.prevNav}}</span>
+            <span class="navs" @click='nextSlide'>{{options.nextNav}}</span>
+        </div>
     </div>
     <pre>
             Это мой слайдер. 
@@ -242,7 +244,7 @@
                     this.updateWidth()
                     window.addEventListener('resize', this.updateWidth)
                     this.numItemReal = Object.keys(this.slides).length;
-                    if ('ontouchstart' in window) { 
+                    if ('ontouchstart' in window) {
                         this.$refs.slides.addEventListener('touchstart', this.handleMouseDown)
                         this.$refs.slides.addEventListener('touchend', this.handleMouseUp)
                         this.$refs.slides.addEventListener('touchmove', this.handleMouseMove)
@@ -271,11 +273,38 @@
             display: grid;
             grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
         }
+
+        .item {
+            border: 1px solid #e8e8e8;
+            text-align: center;
+            margin-left: -1px;
+        }
+
         .item img {
             width: 300px;
             height: 300px;
             object-fit: cover;
         }
+
+        .item span {
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .navigat {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        span.navs {
+            font-size: 20px;
+            font-weight: bold;
+            border: 1px solid gray;
+            padding: 5px;
+            border-radius: 10px;
+            color: darkslategrey;
+        }
+
         pre {
             border: 2px solid crimson;
             display: inline-block;
