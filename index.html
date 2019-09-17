@@ -12,7 +12,7 @@
 <body>
     <div id="app">
         <div class="container">
-            <div class="myslide" ref='slides'>
+            <div class="myslide" ref='slides' name="slide">
                 <div class="item" v-for="(slide,key) in el.newCollect" :key='key'>
                     <img :src="slide.src">
                     <h3>{{slide.text}}</h3>
